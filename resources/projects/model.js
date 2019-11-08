@@ -4,16 +4,16 @@ function getProjects() {
   return db("projects");
 }
 
-function getProjectTasks(project_id) {
+function getProjectTasks(id) {
   return db("tasks")
     .select("id", "description", "notes", "completed")
-    .where({ project_id });
+    .where({ project_id: id });
 }
 
 function getProjectResources(project_id) {
   return db("resources as r")
     .join("project-resources as pr", "pr.resource_id", "r.id")
-    .select("r.id", "r.name", "r.description")
+    .select("r.id", "r.resource_name", "r.description")
     .where({ project_id });
 }
 
@@ -28,6 +28,7 @@ function getProjectById(id) {
 
   return Promise.all(promises).then(results => {
     const [project, tasks, resources] = results;
+
     return { ...project, tasks, resources };
   });
 }
