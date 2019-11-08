@@ -24,7 +24,6 @@ router.get("/", (req, res) => {
 });
 
 //adding projects
-// POST /api/projects endpoint for Adding projects - TESTED
 router.post("/", (req, res) => {
   const projectToAdd = { ...req.body, completed: 0 };
   Projects.addProject(projectToAdd)
@@ -38,7 +37,7 @@ router.post("/", (req, res) => {
 });
 
 //adding tasks
-router.post("/:id/task", (req, res) => {
+router.post("/:id/tasks", (req, res) => {
   Projects.getProjectById(req.params.id)
     .then(project => {
       if (project) {
@@ -54,7 +53,7 @@ router.post("/:id/task", (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({ message: "Could create new task" });
+      res.status(500).json({ message: "Could not create new task" });
     });
 });
 
