@@ -2,7 +2,6 @@ const express = require("express");
 const Tasks = require("./model");
 const router = express.Router();
 
-
 // retrieving a list of tasks - TESTED
 router.get("/", (req, res) =>
   Tasks.getTasks()

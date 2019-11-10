@@ -57,10 +57,11 @@ router.post("/:id/tasks", (req, res) => {
     });
 });
 
-//STRETCH
-//getting project by ID
+//STRETCH GOALS
+//Getting project by ID
 router.get("/:id", (req, res) => {
-  Projects.getProjectById(req.params.id)
+  const { id } = req.params;
+  Projects.getProjectById(id)
     .then(project => {
       if (project) {
         const updated = {
