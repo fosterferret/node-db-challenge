@@ -1,9 +1,8 @@
 const db = require("../../data/dbConfig");
 
-function addTask(task, project_id) {
-  return db("tasks")
-    .insert({ ...task, project_id })
-    .then(id => db("tasks").where({ id: id[0] }));
+async function addTask(task, project_id) {
+  const id = await db("tasks").insert({ ...task, project_id });
+  return await db("tasks").where({ id: id[0] });
 }
 
 function getTasks() {
@@ -24,7 +23,7 @@ function getTaskContexts(task_id) {
     .where({ task_id });
 }
 
-function getTaskById(id) {
+async function getTaskById(id) {
   const promises = [
     db("tasks")
       .where({ id })
@@ -32,11 +31,9 @@ function getTaskById(id) {
     getTaskContexts(id)
   ];
 
-  return Promise.all(promises).then(output => {
-    const [task, contexts] = output;
-
-    return { ...task, contexts };
-  });
+  let output = await Promise.all(promises);
+  const [task, contexts] = output;
+  return { ...task, contexts };
 }
 
 module.exports = {

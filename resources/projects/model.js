@@ -17,7 +17,7 @@ function getProjectResources(project_id) {
     .where({ project_id });
 }
 
-function getProjectById(id) {
+async function getProjectById(id) {
   const promises = [
     db("projects")
       .where({ id })
@@ -26,17 +26,14 @@ function getProjectById(id) {
     getProjectResources(id)
   ];
 
-  return Promise.all(promises).then(results => {
-    const [project, tasks, resources] = results;
-
-    return { ...project, tasks, resources };
-  });
+  let results = await Promise.all(promises);
+  const [project, tasks, resources] = results;
+  return { ...project, tasks, resources };
 }
 
-function addProject(project) {
-  return db("projects")
-    .insert(project)
-    .then(ids => db("projects").where({ id: ids[0] }));
+async function addProject(project) {
+  const ids = await db("projects").insert(project);
+  return await db("projects").where({ id: ids[0] });
 }
 
 module.exports = {

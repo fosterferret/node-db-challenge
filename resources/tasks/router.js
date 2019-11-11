@@ -2,7 +2,6 @@ const express = require("express");
 const Tasks = require("./model");
 const router = express.Router();
 
-// retrieving a list of tasks - TESTED
 router.get("/", (req, res) =>
   Tasks.getTasks()
     .then(tasks => {
@@ -29,7 +28,10 @@ router.get("/:id", (req, res) => {
       if (task) {
         const updated = {
           ...task,
-          completed: task.completed === 1 ? true : false
+          completed:
+            task.completed === 1
+              ? (task.completed = true)
+              : (task.completed = false)
         };
         res.status(200).json(updated);
       } else {
